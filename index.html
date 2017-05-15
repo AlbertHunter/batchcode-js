@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create code</title>
+<meta name="Description" content="">
+<!-- Bootstrap -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="static/style.css">
+<script src="static/jquery.1.9.0.min.js"></script>
+</head>
+<body>
+<div class="form">
+	<div class="form-inline">
+		<div class="form-group">
+			<label for="exampleInputName2">Character</label>
+			<label class="checkbox-inline">
+			  <input type="checkbox" id="upper" value="1" checked="checked"> Uppercase Letters
+			</label>
+			<label class="checkbox-inline">
+			  <input type="checkbox" id="lower" value="1" checked="checked"> Lowercase Letters
+			</label>
+			<label class="checkbox-inline">
+			  <input type="checkbox" id="numbers" value="1" checked="checked"> Numbers
+			</label>
+			<label class="checkbox-inline">
+			  <input type="checkbox" id="symbols" value="1"> Symbols
+			</label>
+			&nbsp;&nbsp;
+			<label for="exampleInputName2">Password Length
+				<select class="form-control" id="pwdlength">
+					<option selected = "selected">16</option>
+					<option>24</option>
+					<option>32</option>
+					<option>64</option>
+				</select>
+			</label>
+
+		</div>
+	</div>	
+	<div class="form-inline">
+		<div class="form-group">
+			<label for="ftpuser">FTP user</label>
+			<input type="text" class="form-control" id="ftpuser" placeholder="FTP user">
+		</div>
+		<div class="form-group">
+			<label for="ftppwd">Ftp Password</label>
+			<input type="text" class="form-control" id="ftppwd" placeholder="Ftp Password">
+		</div>
+	</div>
+	<div class="form-inline">
+		<div class="form-group">
+			<label for="mysqlrootuser">Mysql Root user</label>
+			<input type="text" class="form-control" id="mysqlrootuser" placeholder="Mysql Root user">
+		</div>
+		<div class="form-group">
+			<label for="mysqlpwd">Mysql Root Password</label>
+			<input type="text" class="form-control" id="mysqlrootpwd" placeholder="Mysql Root Password">
+		</div>
+	</div>
+
+	<div class="form-inline">
+		<div class="form-group">
+			<label for="mysqluser">Mysql user</label>
+			<input type="text" class="form-control" id="mysqluser" placeholder="Mysql user">
+		</div>
+		<div class="form-group">
+			<label for="mysqlpwd">Mysql Password</label>
+			<input type="text" class="form-control" id="mysqlpwd" placeholder="Mysql Password">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="code">code</label>
+		<textarea class="form-control" id="code" rows='10'>
+#create ftp user
+USER_COUNT=`cat /etc/passwd | grep '^[ftpuser]:' -c`
+USER_NAME='[ftpuser]'
+if [ $USER_COUNT -ne 1 ]
+ then
+ useradd $USER_NAME
+ echo "[ftppwd]" | passwd $USER_NAME --stdin
+ else
+ echo 'user exits'
+fi		
+#create mysql user
+mysql -u [mysqlrootuser] -p[mysqlrootpwd] -e "  
+tee /tmp/temp.log  
+CREATE USER '[mysqluser]'@'host' IDENTIFIED BY '[mysqlpwd]'; 
+grant select,delete,update,create,drop on *.* to [mysqluser]@localhost identified by "[mysqlpwd]";
+flush privileges;
+notee  
+quit"  
+
+		</textarea>
+	</div>
+	<p class="error-info"></p>
+	<button type="submit" class="btn btn-block btn-primary" id="submit">Submit</button>
+	<div class="form-group">
+		<label for="output">output code</label>
+		<textarea class="form-control" id="output" rows='10'></textarea>
+	</div>
+</div>
+<script type="text/javascript" src="static/main.js"></script>
+</body>
+</html>
